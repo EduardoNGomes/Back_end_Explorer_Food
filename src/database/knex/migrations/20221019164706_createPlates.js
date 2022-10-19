@@ -5,7 +5,6 @@ exports.up = knex =>
     table.string('price')
     table.string('description')
     table.string('img')
-    table.integer('user_id').references('id').inTable('users')
   })
 
 exports.down = knex => knex.schema.dropTable('plates')

@@ -6,7 +6,9 @@ class UsersController {
     const { name, email, password, admin } = request.body
 
     if (!name || !email || password.length < 6) {
-      throw new AppError('Informações inválidas')
+      throw new AppError(
+        'Não foi possivel realizar o cadastro, por favor verifique suas informações'
+      )
     }
 
     const userExists = await knex.select('email').where({ email }).from('users')
