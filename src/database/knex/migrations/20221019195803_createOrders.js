@@ -3,7 +3,9 @@ exports.up = knex =>
     table.increments('id')
     table.string('status')
     table.string('description')
-    table.timestamps('updated_at')
+    table.timestamp('created_at').default(knex.fn.now())
+    table.timestamp('update_at').default(knex.fn.now())
+    table.integer('user_id').references('id').inTable('users')
   })
 
 exports.down = knex => knex.schema.dropTable('orders')
