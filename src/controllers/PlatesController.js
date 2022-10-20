@@ -64,32 +64,39 @@ class PlatesController {
   }
 
   async create(request, response) {
-    const { title, price, description, img, ingredients } = request.body
+    const { title, price, description, img, ingredients, type } = request.body
 
-    if (!title || !price || !description || !img) {
+    if (!title || !price || !description || !img || !type) {
       throw new AppError(
         'Não foi possivel realizar o cadastro, por favor verifique suas informações'
       )
     }
 
-    const plate_id = await knex('plates').insert({
-      title,
-      price,
-      description,
-      img
-    })
+    if (type === 'meal' || type === 'drink' || type === 'dessert') {
+      const plate_id = await knex('plates').insert({
+        title,
+        price,
+        description,
+        img,
+        type
+      })
 
-    const ingredientsInsert = ingredients.map(ingredient => {
-      return {
-        title: ingredient,
-        img: ingredientImg(ingredient),
-        plate_id
-      }
-    })
+      const ingredientsInsert = ingredients.map(ingredient => {
+        return {
+          title: ingredient,
+          img: ingredientImg(ingredient),
+          plate_id
+        }
+      })
 
-    await knex('ingredients').insert(ingredientsInsert)
+      await knex('ingredients').insert(ingredientsInsert)
 
-    return response.send('Plate Saved')
+      return response.send('Plate Saved')
+    } else {
+      throw new AppError(
+        'Não foi possivel realizar o cadastro, por favor verifique suas informações'
+      )
+    }
   }
 
   async delete(request, response) {

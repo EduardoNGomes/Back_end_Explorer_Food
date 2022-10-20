@@ -5,6 +5,7 @@ exports.up = knex =>
     table.string('price')
     table.string('description')
     table.string('img')
+    table.string('type')
   })
 
 exports.down = knex => knex.schema.dropTable('plates')
