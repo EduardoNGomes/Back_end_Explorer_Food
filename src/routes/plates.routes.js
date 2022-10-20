@@ -6,8 +6,8 @@ const PlatesController = require('../controllers/PlatesController')
 
 const platesController = new PlatesController()
 
-platesRoutes.get('/', platesController.show)
-platesRoutes.get('/:id', platesController.index)
+platesRoutes.get('/', platesController.index)
+platesRoutes.get('/:id', platesController.show)
 platesRoutes.post('/', platesController.create)
 platesRoutes.delete('/:id', platesController.delete)
 

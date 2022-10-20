@@ -57,7 +57,7 @@ function ingredientImg(name) {
 }
 
 class PlatesController {
-  async show(request, response) {
+  async index(request, response) {
     const plates = await knex('plates').select()
 
     return response.json(plates)
@@ -106,7 +106,7 @@ class PlatesController {
 
     return response.send('Plate deleted')
   }
-  async index(request, response) {
+  async show(request, response) {
     const { id } = request.params
 
     const plate = await knex('plates').where({ id })
