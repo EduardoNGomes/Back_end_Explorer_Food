@@ -21,6 +21,23 @@ class OrdersController {
 
     return response.send('Pedido feito com sucesso')
   }
+
+  async change(request, response) {
+    const { id } = request.params
+    const { status } = request.body
+
+    if (
+      status === 'pending' ||
+      status === 'readying' ||
+      status === 'delivered'
+    ) {
+      await knex('orders').where({ id }).update({ status })
+    } else {
+      throw new AppError('Informações inválidas')
+    }
+
+    return response.send('Pedido atualizado')
+  }
 }
 
 module.exports = OrdersController
