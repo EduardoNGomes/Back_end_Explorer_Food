@@ -1,14 +1,13 @@
 require('express-async-errors')
 const AppError = require('./utils/AppError')
-
+const uploadConfig = require('./configs/upload')
 const express = require('express')
 
 const app = express()
-
 const routes = require('./routes')
 
 app.use(express.json())
-
+app.use('/plates', express.static(uploadConfig.UPLOAD_FOLDER))
 app.use(routes)
 app.use((error, request, response, next) => {
   if (error instanceof AppError) {

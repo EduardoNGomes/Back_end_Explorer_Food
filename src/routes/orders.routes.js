@@ -7,7 +7,9 @@ const ensureAuthenticated = require('../middleware/ensureAuthenticated')
 
 const ordersController = new OrdersController()
 
-ordersRoutes.post('/', ensureAuthenticated, ordersController.create)
+ordersRoutes.use(ensureAuthenticated)
+
+ordersRoutes.post('/', ordersController.create)
 ordersRoutes.put('/:id', ordersController.change)
 
 module.exports = ordersRoutes

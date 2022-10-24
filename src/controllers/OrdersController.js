@@ -23,17 +23,24 @@ class OrdersController {
   }
 
   async change(request, response) {
+    const user_id = request.user.id
     const { id } = request.params
     const { status } = request.body
 
-    if (
-      status === 'pending' ||
-      status === 'readying' ||
-      status === 'delivered'
-    ) {
-      await knex('orders').where({ id }).update({ status })
+    const user = await knex('users').where({ id: user_id }).select().first()
+
+    if (user.admin) {
+      if (
+        status === 'pending' ||
+        status === 'readying' ||
+        status === 'delivered'
+      ) {
+        await knex('orders').where({ id }).update({ status })
+      } else {
+        throw new AppError('Informações inválidas')
+      }
     } else {
-      throw new AppError('Informações inválidas')
+      throw new AppError('Usuaro invalido', 401)
     }
 
     return response.send('Pedido atualizado')
