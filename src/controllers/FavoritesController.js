@@ -3,7 +3,7 @@ const AppError = require('../utils/AppError')
 
 class FavoritesController {
   async addAndRemove(request, response) {
-    const { user_id } = request.params
+    const user_id = request.user.id
     const { plate_id } = request.body
 
     const favorite = await knex('favorites').where({ plate_id })
@@ -19,7 +19,7 @@ class FavoritesController {
     return response.json()
   }
   async show(request, response) {
-    const { user_id } = request.params
+    const user_id = request.user.id
 
     const plates = await knex('favorites').where({ user_id }).select()
 

@@ -1,5 +1,6 @@
 const knex = require('../database/knex')
 const AppError = require('../utils/AppError')
+const DiskStorage = require('../providers/DiskStorage')
 
 function ingredientImg(name) {
   switch (name) {
@@ -64,32 +65,37 @@ class PlatesController {
   }
 
   async create(request, response) {
-    const { title, price, description, img, ingredients, type } = request.body
+    const { title, price, description, ingredients, type } = request.body
+    const img = request.file.filename
+
+    const diskStorage = new DiskStorage()
 
     if (!title || !price || !description || !img || !type) {
-      throw new AppError(
-        'Não foi possivel realizar o cadastro, por favor verifique suas informações'
-      )
+      throw new AppError('Não foi possivel realizar o cadastro.')
     }
 
     if (type === 'meal' || type === 'drink' || type === 'dessert') {
+      const filename = await diskStorage.saveFile(img)
+
       const plate_id = await knex('plates').insert({
         title,
         price,
         description,
-        img,
+        img: filename,
         type
       })
 
-      const ingredientsInsert = ingredients.map(ingredient => {
-        return {
-          title: ingredient,
-          img: ingredientImg(ingredient),
-          plate_id
-        }
-      })
+      if (ingredients) {
+        const ingredientsInsert = ingredients.map(ingredient => {
+          return {
+            title: ingredient,
+            img: ingredientImg(ingredient),
+            plate_id
+          }
+        })
 
-      await knex('ingredients').insert(ingredientsInsert)
+        await knex('ingredients').insert(ingredientsInsert)
+      }
 
       return response.send('Plate Saved')
     } else {
@@ -120,3 +126,5 @@ class PlatesController {
 }
 
 module.exports = PlatesController
+
+// {	"title": "Nome do prato ",	"price": "50,00",	"description": "lorem lorem lorem",	"type": "meal",	"ingredients": [		"alface",		"igd2"	]}

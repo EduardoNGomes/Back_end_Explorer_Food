@@ -3,7 +3,7 @@ const AppError = require('../utils/AppError')
 
 class OrdersController {
   async create(request, response) {
-    const { user_id } = request.params
+    const user_id = request.user.id
 
     const { status, description } = request.body
 

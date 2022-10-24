@@ -1,5 +1,10 @@
 const { Router } = require('express')
 
+const multer = require('multer')
+const uploadConfig = require('../configs/upload')
+
+const upload = multer(uploadConfig.MULTER)
+
 const platesRoutes = Router()
 
 const PlatesController = require('../controllers/PlatesController')
@@ -8,7 +13,7 @@ const platesController = new PlatesController()
 
 platesRoutes.get('/', platesController.index)
 platesRoutes.get('/:id', platesController.show)
-platesRoutes.post('/', platesController.create)
+platesRoutes.post('/', upload.single('img'), platesController.create)
 platesRoutes.delete('/:id', platesController.delete)
 
 module.exports = platesRoutes
