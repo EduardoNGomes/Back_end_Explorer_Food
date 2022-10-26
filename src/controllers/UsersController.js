@@ -26,7 +26,7 @@ class UsersController {
       admin
     })
 
-    return response.status(200).send('User created')
+    return response.json()
   }
 }
 
