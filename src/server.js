@@ -9,6 +9,7 @@ const app = express()
 
 app.use(cors())
 app.use(express.json())
+
 app.use('/plates', express.static(uploadConfig.UPLOAD_FOLDER))
 app.use(routes)
 app.use((error, request, response, next) => {

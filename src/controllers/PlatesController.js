@@ -65,44 +65,40 @@ class PlatesController {
   }
 
   async create(request, response) {
-    const { title, price, description, ingredients, type } = request.body
+    const data = request.body.data
+    const { title, price, description, ingredients, type } = JSON.parse(data)
     const img = request.file.filename
 
+    console.log(title)
     const diskStorage = new DiskStorage()
 
     if (!title || !price || !description || !img || !type) {
       throw new AppError('Não foi possivel realizar o cadastro.')
     }
 
-    if (type === 'meal' || type === 'drink' || type === 'dessert') {
-      const filename = await diskStorage.saveFile(img)
+    const filename = await diskStorage.saveFile(img)
 
-      const plate_id = await knex('plates').insert({
-        title,
-        price,
-        description,
-        img: filename,
-        type
+    const plate_id = await knex('plates').insert({
+      title,
+      price,
+      description,
+      img: filename,
+      type
+    })
+
+    if (ingredients) {
+      const ingredientsInsert = ingredients.map(ingredient => {
+        return {
+          title: ingredient,
+          img: ingredientImg(ingredient),
+          plate_id
+        }
       })
 
-      if (ingredients) {
-        const ingredientsInsert = ingredients.map(ingredient => {
-          return {
-            title: ingredient,
-            img: ingredientImg(ingredient),
-            plate_id
-          }
-        })
-
-        await knex('ingredients').insert(ingredientsInsert)
-      }
-
-      return response.send('Plate Saved')
-    } else {
-      throw new AppError(
-        'Não foi possivel realizar o cadastro, por favor verifique suas informações'
-      )
+      await knex('ingredients').insert(ingredientsInsert)
     }
+
+    return response.send('Plate Saved')
   }
 
   async delete(request, response) {
