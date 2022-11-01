@@ -18,7 +18,7 @@ class FavoritesController {
 
     return response.json()
   }
-  async show(request, response) {
+  async index(request, response) {
     const user_id = request.user.id
 
     const plates = await knex('favorites').where({ user_id }).select()
@@ -33,6 +33,15 @@ class FavoritesController {
     Promise.all(allFavorites).then(value => {
       response.json(value.flat())
     })
+  }
+
+  async show(request, response) {
+    const user_id = request.user.id
+    const { id } = request.params
+
+    const plate = await knex('favorites').where({ user_id }).andWhere({ id })
+
+    return response.json(plate)
   }
 }
 

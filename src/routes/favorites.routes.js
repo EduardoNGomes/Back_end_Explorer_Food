@@ -11,6 +11,7 @@ const favoritesController = new FavoritesController()
 favoritesRoutes.use(ensureAuthenticated)
 
 favoritesRoutes.post('/', favoritesController.addAndRemove)
-favoritesRoutes.get('/', favoritesController.show)
+favoritesRoutes.get('/', favoritesController.index)
+favoritesRoutes.get('/:id', favoritesController.show)
 
 module.exports = favoritesRoutes

@@ -5,12 +5,16 @@ const express = require('express')
 const routes = require('./routes')
 const cors = require('cors')
 
+const path = require('path')
+
 const app = express()
 
 app.use(cors())
 app.use(express.json())
 
 app.use('/plates', express.static(uploadConfig.UPLOAD_FOLDER))
+app.use(express.static(path.resolve(__dirname, 'assets', 'images')))
+
 app.use(routes)
 app.use((error, request, response, next) => {
   if (error instanceof AppError) {

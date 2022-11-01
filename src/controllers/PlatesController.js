@@ -5,55 +5,55 @@ const DiskStorage = require('../providers/DiskStorage')
 function ingredientImg(name) {
   switch (name) {
     case 'alface':
-      return '../assets/images/alface.png'
+      return 'alface.png'
     case 'ameixa':
-      return '../assets/images/ameixa.png'
+      return 'ameixa.png'
     case 'amêndoas':
-      return '../assets/images/amêndoas.png'
+      return 'amêndoas.png'
     case 'aniz':
-      return '../assets/images/aniz.png'
+      return 'aniz.png'
     case 'café':
-      return '../assets/images/café.png'
+      return 'café.png'
     case 'camarão':
-      return '../assets/images/camarão.png'
+      return 'camarão.png'
     case 'canela':
-      return '../assets/images/canela.png'
+      return 'canela.png'
     case 'claras':
-      return '../assets/images/claras.png'
+      return 'claras.png'
     case 'damasco':
-      return '../assets/images/damasco.png'
+      return 'damasco.png'
     case 'farinha':
-      return '../assets/images/farinha.png'
+      return 'farinha.png'
     case 'limão':
-      return '../assets/images/limão.png'
+      return 'limão.png'
     case 'maçã':
-      return '../assets/images/maçã.png'
+      return 'maçã.png'
     case 'massa':
-      return '../assets/images/massa.png'
+      return 'massa.png'
     case 'pão naan':
-      return '../assets/images/pão naan.png'
+      return 'pão naan.png'
     case 'pão':
-      return '../assets/images/pão.png'
+      return 'pão.png'
     case 'pepino':
-      return '../assets/images/pepino.png'
+      return 'pepino.png'
     case 'pêssego':
-      return '../assets/images/pêssego.png'
+      return 'pêssego.png'
     case 'pesto':
-      return '../assets/images/pesto.png'
+      return 'pesto.png'
     case 'maracujá':
-      return '../assets/images/maracujá.png'
+      return 'maracujá.png'
     case 'presunto':
-      return '../assets/images/presunto.png'
+      return 'presunto.png'
     case 'rabanete':
-      return '../assets/images/rabanete.png'
+      return 'rabanete.png'
     case 'rúcula':
-      return '../assets/images/rúcula.png'
+      return 'rúcula.png'
     case 'tomate':
-      return '../assets/images/tomate.png'
+      return 'tomate.png'
     case 'whiskey':
-      return '../assets/images/whiskey.png'
+      return 'whiskey.png'
     default:
-      return ''
+      return 'default'
   }
 }
 
@@ -69,7 +69,6 @@ class PlatesController {
     const { title, price, description, ingredients, type } = JSON.parse(data)
     const img = request.file.filename
 
-    console.log(title)
     const diskStorage = new DiskStorage()
 
     if (!title || !price || !description || !img || !type) {
@@ -111,16 +110,11 @@ class PlatesController {
   async show(request, response) {
     const { id } = request.params
 
-    const plate = await knex('plates').where({ id })
+    const plate = await knex('plates').where({ id }).first()
     const ingredients = await knex('ingredients').where({ plate_id: id })
 
-    return response.json({
-      ...plate,
-      ingredients
-    })
+    return response.json({ ...plate, ingredients })
   }
 }
 
 module.exports = PlatesController
-
-// {	"title": "Nome do prato ",	"price": "50,00",	"description": "lorem lorem lorem",	"type": "meal",	"ingredients": [		"alface",		"igd2"	]}
