@@ -2,6 +2,14 @@ const knex = require('../database/knex')
 const AppError = require('../utils/AppError')
 
 class OrdersController {
+  async show(request, response) {
+    const user_id = request.user.id
+
+    const orders = await knex('orders')
+
+    return response.json(orders)
+  }
+
   async create(request, response) {
     const user_id = request.user.id
 
