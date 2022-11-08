@@ -59,8 +59,15 @@ function ingredientImg(name) {
 
 class PlatesController {
   async index(request, response) {
-    const plates = await knex('plates').select()
+    const { title } = request.query
 
+    let plates
+
+    if (title) {
+      plates = await knex('plates').whereLike('plates.title', `%${title}%`)
+    } else {
+      plates = await knex('plates')
+    }
     return response.json(plates)
   }
 
@@ -97,7 +104,7 @@ class PlatesController {
       await knex('ingredients').insert(ingredientsInsert)
     }
 
-    return response.send('Plate Saved')
+    return response.json()
   }
 
   async delete(request, response) {
@@ -105,7 +112,7 @@ class PlatesController {
 
     await knex('plates').where({ id }).delete()
 
-    return response.send('Plate deleted')
+    return response.json()
   }
   async show(request, response) {
     const { id } = request.params
@@ -114,6 +121,44 @@ class PlatesController {
     const ingredients = await knex('ingredients').where({ plate_id: id })
 
     return response.json({ ...plate, ingredients })
+  }
+
+  async att(request, response) {
+    const data = request.body.data
+    const { title, price, description, ingredients, type } = JSON.parse(data)
+    const { id } = request.params
+    const img = request.file.filename
+
+    const diskStorage = new DiskStorage()
+
+    if (!title || !price || !description || !img || !type) {
+      throw new AppError('Não foi possivel realizar o cadastro.')
+    }
+
+    const filename = await diskStorage.saveFile(img)
+
+    await knex('plates').where({ id }).update({
+      title,
+      price,
+      description,
+      img: filename,
+      type
+    })
+
+    if (ingredients) {
+      await knex('ingredients').where({ plate_id: id }).delete()
+
+      const ingredientsInsert = ingredients.map(ingredient => {
+        return {
+          title: ingredient,
+          img: ingredientImg(ingredient),
+          plate_id: id
+        }
+      })
+
+      await knex('ingredients').insert(ingredientsInsert)
+    }
+    return response.json()
   }
 }
 

@@ -15,5 +15,6 @@ platesRoutes.get('/', platesController.index)
 platesRoutes.get('/:id', platesController.show)
 platesRoutes.post('/', upload.single('img'), platesController.create)
 platesRoutes.delete('/:id', platesController.delete)
+platesRoutes.put('/:id', upload.single('img'), platesController.att)
 
 module.exports = platesRoutes
