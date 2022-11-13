@@ -1,46 +1,32 @@
 const knex = require('../database/knex')
-const AppError = require('../utils/AppError')
 
 class FavoritesController {
-  async addAndRemove(request, response) {
+  async create(request, response) {
     const user_id = request.user.id
-    const { plate_id } = request.body
+    const { favoriteList } = request.body
 
-    const favorite = await knex('favorites').where({ plate_id })
-    if (favorite.length === 1) {
-      await knex('favorites').where({ plate_id }).delete()
-    } else {
-      await knex('favorites').insert({
-        user_id,
-        plate_id
-      })
-    }
+    const favorite = await knex('favorites').insert({
+      user_id,
+      favoriteList
+    })
 
     return response.json()
   }
-  async index(request, response) {
+  async update(request, response) {
     const user_id = request.user.id
+    const { favoriteList } = request.body
 
-    const plates = await knex('favorites').where({ user_id }).select()
-
-    const allFavorites = plates.map(async favorite => {
-      return await knex('plates').where({ id: favorite.plate_id })
-    })
-
-    Promise.all(allFavorites).then(value => {
-      response.json(value.flat())
+    await knex('favorites').where({ user_id }).update({
+      favoriteList
     })
   }
 
   async show(request, response) {
     const user_id = request.user.id
-    const { id } = request.params
 
-    const plate = await knex('favorites')
-      .where({ user_id })
-      .andWhere({ plate_id: id })
+    const favorite = await knex('favorites').where({ user_id }).first()
 
-    return response.json(plate)
+    response.json(favorite)
   }
 }
 
