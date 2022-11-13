@@ -16,9 +16,13 @@ class FavoritesController {
     const user_id = request.user.id
     const { favoriteList } = request.body
 
-    await knex('favorites').where({ user_id }).update({
-      favoriteList
-    })
+    if (favoriteList) {
+      await knex('favorites').where({ user_id }).update({
+        favoriteList
+      })
+    }
+
+    response.json()
   }
 
   async show(request, response) {
