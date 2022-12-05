@@ -1,7 +1,6 @@
 # Back-End Food Explorer
 
-# Deploy Full Project
-- [FoodExplorer](https://foodexplorereduardo.netlify.app/)
+
 
 ## Project description
 
