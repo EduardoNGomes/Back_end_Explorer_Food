@@ -10,6 +10,12 @@
 - [x] User registration
 - [x] product registration
 
+### How to use
+
+- To use this project you need to clone this repository and clone https://github.com/EduardoNGomes/Front_end_Explorer_Food ,
+  then in both : 
+- npm run dev
+
 ### 🛠 Tecnologias
 The following tools were used in building the project
 
