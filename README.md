@@ -12,7 +12,7 @@
 
 ### How to use
 
-- To use this project you need to clone this repository and clone https://github.com/EduardoNGomes/Front_end_Explorer_Food ,
+- To use this project you need to clone this repository and clone [Front-end](https://github.com/EduardoNGomes/Front_end_Explorer_Food) ,
   then in both : 
 - npm run dev
 
